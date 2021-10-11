@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import * as esbuild from 'esbuild-wasm';
+import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
@@ -26,11 +27,15 @@ const App: React.FC = () => {
     if (!esBuildService.current) {
       return alert('Service is not initialized try again in  5 seconds');
     }
-    const result = await esbuild.transform(input, {
-      target: 'es2015',
-      loader: 'jsx',
+    const result = await esbuild.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin()]
     })
-    setCode(result.code)
+
+    setCode(result.outputFiles[0].text)
+    console.log(result)
   }
 
   const onInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
