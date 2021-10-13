@@ -11,11 +11,10 @@ export const unpkgPathPlugin = () => {
           return {path: args.path, namespace: 'a'};
         } else {
           return {
-            path: 'https://unpkg.com/react@17.0.2/index.js',
+            path: `https://unpkg.com/${args.path}/index.js`,
             namespace: 'a'
           }
         }
-
       });
 
       build.onLoad({filter: /.*/}, async (args: any) => {
@@ -25,7 +24,7 @@ export const unpkgPathPlugin = () => {
           return {
             loader: 'jsx',
             contents: `
-              const message = require('react');
+              import message from 'medium-test-pkg';
               console.log(message);
             `,
           };
