@@ -31,7 +31,13 @@ const App: React.FC = () => {
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()]
+      plugins: [unpkgPathPlugin()],
+      // For loading all packages in production mode
+      // and replace global object to window in browser
+      define: {
+        'process.env.NODE_ENV': '"production"',
+        global: 'window'
+      }
     })
 
     setCode(result.outputFiles[0].text)
