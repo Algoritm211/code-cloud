@@ -1,10 +1,4 @@
 import * as esbuild from 'esbuild-wasm';
-import axios from "axios";
-import localforage from "localforage";
-
-const fileCacher = localforage.createInstance({
-  name: 'modulesCacher'
-})
 
 export const unpkgPathPlugin = () => {
   return {
@@ -33,38 +27,6 @@ export const unpkgPathPlugin = () => {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`
         }
-      });
-
-      build.onLoad({filter: /.*/}, async (args: any) => {
-        console.log('onLoad', args);
-
-        if (args.path === 'index.js') {
-          return {
-            loader: 'jsx',
-            contents: `
-              import message from 'react';
-              console.log(message);
-            `,
-          };
-        }
-
-        const cachedData = await fileCacher.getItem<esbuild.OnLoadResult>(args.path)
-
-        if (cachedData) {
-          return cachedData
-        }
-
-        const {data, request} = await axios.get(args.path)
-
-        const result: esbuild.OnLoadResult =  {
-          loader: 'jsx',
-          contents: data,
-          resolveDir: new URL('./', request.responseURL).pathname
-        }
-
-        await fileCacher.setItem(args.path, result)
-
-        return result
       });
     },
   };

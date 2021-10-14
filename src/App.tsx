@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import * as esbuild from 'esbuild-wasm';
 import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
+import {loadFilePlugin} from "./plugins/load-file-plugin";
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
@@ -31,7 +32,10 @@ const App: React.FC = () => {
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [
+        unpkgPathPlugin(),
+        loadFilePlugin(input)
+      ],
       // For loading all packages in production mode
       // and replace global object to window in browser
       define: {
