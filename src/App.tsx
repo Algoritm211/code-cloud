@@ -45,12 +45,17 @@ const App: React.FC = () => {
     })
 
     setCode(result.outputFiles[0].text)
-    console.log(result)
   }
 
   const onInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.target.value)
   }
+
+  const codeToRunInIframe = `
+    <script>
+      ${code}
+    </script>
+  `
   return (
     <div className='container'>
       <h1>Code cloud</h1>
@@ -65,6 +70,11 @@ const App: React.FC = () => {
       <pre>
         {code}
       </pre>
+      <iframe
+        title='run_jsx'
+        srcDoc={codeToRunInIframe}
+        sandbox='allow-scripts'
+        src='/test.html' />
     </div>
   );
 }
