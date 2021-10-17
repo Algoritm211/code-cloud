@@ -8,6 +8,7 @@ const App: React.FC = () => {
   const [input, setInput] = useState('');
   const [code, setCode] = useState('');
   const esBuildService = useRef<any>(null);
+  const iframeRef = useRef<any>()
 
   const initializeESBuild = async () => {
     if (esBuildService.current !== null) {
@@ -44,7 +45,11 @@ const App: React.FC = () => {
       }
     })
 
-    setCode(result.outputFiles[0].text)
+    // setCode(result.outputFiles[0].text)
+    iframeRef
+      .current
+      .contentWindow
+      .postMessage(result.outputFiles[0].text, '*')
   }
 
   const onInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -52,9 +57,19 @@ const App: React.FC = () => {
   }
 
   const codeToRunInIframe = `
-    <script>
-      ${code}
-    </script>
+   <html lang='uk'>
+    <head>
+    <title>Code execution</title>
+    <body>
+      <div id='root'>
+      </div>
+      <script>
+        window.addEventListener('message', (event) => {
+          eval(event.data)
+        })
+      </script>
+    </body>
+   </html>
   `
   return (
     <div className='container'>
@@ -62,7 +77,8 @@ const App: React.FC = () => {
       <textarea
         onChange={onInputChange}
         cols={30}
-        rows={10}>
+        rows={10}
+      >
       </textarea>
       <button onClick={onSubmitCode}>
         Submit code
@@ -71,10 +87,12 @@ const App: React.FC = () => {
         {code}
       </pre>
       <iframe
+        ref={iframeRef}
         title='run_jsx'
         srcDoc={codeToRunInIframe}
         sandbox='allow-scripts'
-        src='/test.html' />
+        src='/test.html'
+      />
     </div>
   );
 }
