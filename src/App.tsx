@@ -6,7 +6,6 @@ import {loadFilePlugin} from "./plugins/load-file-plugin";
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
-  const [code, setCode] = useState('');
   const esBuildService = useRef<any>(null);
   const iframeRef = useRef<any>()
 
@@ -86,9 +85,6 @@ const App: React.FC = () => {
       <button onClick={onSubmitCode}>
         Submit code
       </button>
-      <pre>
-        {code}
-      </pre>
       <iframe
         ref={iframeRef}
         title='run_jsx'
