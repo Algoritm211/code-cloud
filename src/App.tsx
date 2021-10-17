@@ -29,6 +29,9 @@ const App: React.FC = () => {
     if (!esBuildService.current) {
       return alert('Service is not initialized try again in  5 seconds');
     }
+
+    iframeRef.current.srcdoc = iframeCodeRunnerTemplate
+
     const result = await esbuild.build({
       entryPoints: ['index.js'],
       bundle: true,
@@ -56,7 +59,7 @@ const App: React.FC = () => {
     setInput(event.target.value)
   }
 
-  const codeToRunInIframe = `
+  const iframeCodeRunnerTemplate = `
    <html lang='uk'>
     <head>
     <title>Code execution</title>
@@ -89,7 +92,7 @@ const App: React.FC = () => {
       <iframe
         ref={iframeRef}
         title='run_jsx'
-        srcDoc={codeToRunInIframe}
+        srcDoc={iframeCodeRunnerTemplate}
         sandbox='allow-scripts'
         src='/test.html'
       />
