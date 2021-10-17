@@ -67,8 +67,17 @@ const App: React.FC = () => {
       </div>
       <script>
         window.addEventListener('message', (event) => {
-          eval(event.data)
-        })
+          try {
+            eval(event.data);
+          } catch (error) {
+            const root = document.querySelector('#root');
+            root.innerHTML = '<div style="color: red">' +
+                              '<h3>Runtime error</h3>' + 
+                                error + 
+                              '<div>'
+            console.error(error)       
+          }
+        });
       </script>
     </body>
    </html>
