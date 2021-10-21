@@ -3,6 +3,7 @@ import './App.css';
 import * as esbuild from 'esbuild-wasm';
 import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
 import {loadFilePlugin} from "./plugins/load-file-plugin";
+import CodeEditor from "./components/codeEditor/codeEditor";
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
@@ -54,8 +55,12 @@ const App: React.FC = () => {
       .postMessage(result.outputFiles[0].text, '*')
   }
 
-  const onInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(event.target.value)
+  const onInputChange = (value: string | undefined) => {
+    if (value) {
+      setInput(value)
+    }
+
+    // console.log(value)
   }
 
   const iframeCodeRunnerTemplate = `
@@ -85,8 +90,12 @@ const App: React.FC = () => {
   return (
     <div className='container'>
       <h1>Code cloud</h1>
-      <textarea
+      <CodeEditor
         onChange={onInputChange}
+        initialValue='const author = `Alexey`;'
+      />
+      <textarea
+        // onChange={onInputChange}
         cols={30}
         rows={10}
       >
