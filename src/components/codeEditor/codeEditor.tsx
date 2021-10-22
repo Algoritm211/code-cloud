@@ -24,6 +24,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         minimap: {enabled: false},
         folding: false,
         lineNumbersMinChars: 2,
+        tabSize: 2
       }}
     />
   );
