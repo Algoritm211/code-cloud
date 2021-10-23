@@ -8,7 +8,7 @@ import CodeEditor from "./components/codeEditor/codeEditor";
 const App: React.FC = () => {
   const [input, setInput] = useState('');
   const esBuildService = useRef<any>(null);
-  const iframeRef = useRef<any>()
+  const iframeRef = useRef<any>();
 
   const initializeESBuild = async () => {
     if (esBuildService.current !== null) {
