@@ -40,14 +40,16 @@ const Preview: React.FC<IPreviewProps> = ({code}) => {
       .contentWindow
       .postMessage(code, '*')
   }, [code])
+
   return (
     <iframe
       ref={iframeRef}
       title='run_jsx'
-      srcDoc={iframeCodeRunnerTemplate}
+      // srcDoc={iframeCodeRunnerTemplate}
       sandbox='allow-scripts'
     />
   );
 };
 
 export default Preview;
+
