@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild-wasm";
-import {unpkgPathPlugin} from "../plugins/unpkg-path-plugin";
-import {loadFilePlugin} from "../plugins/load-file-plugin";
+import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
+import {loadFilePlugin} from "./plugins/load-file-plugin";
 
 
 let isInitialized = false

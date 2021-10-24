@@ -26,9 +26,11 @@ const App: React.FC = () => {
         onChange={onInputChange}
         initialValue='const author = `Alexey`;'
       />
-      <button onClick={onSubmitCode}>
-        Submit
-      </button>
+      <div>
+        <button onClick={onSubmitCode}>
+          Submit
+        </button>
+      </div>
       <Preview code={bundledCode} />
     </div>
   );
