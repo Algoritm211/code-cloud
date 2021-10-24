@@ -4,11 +4,12 @@ import * as esbuild from 'esbuild-wasm';
 import {unpkgPathPlugin} from "./plugins/unpkg-path-plugin";
 import {loadFilePlugin} from "./plugins/load-file-plugin";
 import CodeEditor from "./components/codeEditor/codeEditor";
+import Preview from "./components/Preview/Preview";
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
+  const [bundledCode, setBundledCode] = useState('')
   const esBuildService = useRef<any>(null);
-  const iframeRef = useRef<any>();
 
   const initializeESBuild = async () => {
     if (esBuildService.current !== null) {
@@ -30,8 +31,6 @@ const App: React.FC = () => {
       return alert('Service is not initialized try again in  5 seconds');
     }
 
-    iframeRef.current.srcdoc = iframeCodeRunnerTemplate
-
     const result = await esbuild.build({
       entryPoints: ['index.js'],
       bundle: true,
@@ -48,45 +47,15 @@ const App: React.FC = () => {
       }
     })
 
-    // setCode(result.outputFiles[0].text)
-    iframeRef
-      .current
-      .contentWindow
-      .postMessage(result.outputFiles[0].text, '*')
+    setBundledCode(result.outputFiles[0].text)
   }
 
   const onInputChange = (value: string | undefined) => {
     if (value) {
       setInput(value)
     }
-
-    // console.log(value)
   }
 
-  const iframeCodeRunnerTemplate = `
-   <html lang='uk'>
-    <head>
-    <title>Code execution</title>
-    <body>
-      <div id='root'>
-      </div>
-      <script>
-        window.addEventListener('message', (event) => {
-          try {
-            eval(event.data);
-          } catch (error) {
-            const root = document.querySelector('#root');
-            root.innerHTML = '<div style="color: red">' +
-                              '<h3>Runtime error</h3>' + 
-                                error + 
-                              '<div>'
-            console.error(error)       
-          }
-        });
-      </script>
-    </body>
-   </html>
-  `
   return (
     <div className='container'>
       <h1>Code cloud</h1>
@@ -94,22 +63,10 @@ const App: React.FC = () => {
         onChange={onInputChange}
         initialValue='const author = `Alexey`;'
       />
-      <textarea
-        // onChange={onInputChange}
-        cols={30}
-        rows={10}
-      >
-      </textarea>
       <button onClick={onSubmitCode}>
-        Submit code
+        Submit
       </button>
-      <iframe
-        ref={iframeRef}
-        title='run_jsx'
-        srcDoc={iframeCodeRunnerTemplate}
-        sandbox='allow-scripts'
-        src='/test.html'
-      />
+      <Preview code={bundledCode} />
     </div>
   );
 }
