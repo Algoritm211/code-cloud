@@ -7,7 +7,6 @@ const App: React.FC = () => {
     <>
       <h1>Code cloud</h1>
       <CodeCell />
-      <CodeCell />
     </>
   );
 }
