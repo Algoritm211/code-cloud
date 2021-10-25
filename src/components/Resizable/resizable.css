@@ -22,4 +22,5 @@
 
 .resize-horizontal {
   display: flex;
+  height: 100%;
 }
