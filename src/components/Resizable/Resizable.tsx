@@ -11,6 +11,7 @@ const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const [horizontalElemWidth, setHorizontalElemWidth] = useState(window.innerWidth * 0.75);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null
@@ -21,6 +22,9 @@ const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
       timer = setTimeout(() => {
         setInnerWidth(window.innerWidth);
         setInnerHeight(window.innerHeight);
+        if (window.innerWidth * 0.75 < horizontalElemWidth) {
+          setHorizontalElemWidth(window.innerWidth * 0.75)
+        }
       }, 150)
     };
     window.addEventListener('resize', resizeListener);
@@ -28,7 +32,7 @@ const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
     return () => {
       window.removeEventListener('resize', resizeListener)
     }
-  }, []);
+  }, [horizontalElemWidth]);
 
   let resizableBoxProps: ResizableBoxProps;
   if (direction === 'vertical') {
@@ -44,9 +48,12 @@ const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
       className: 'resize-horizontal',
       minConstraints: [innerWidth * 0.3, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
-      width: innerWidth * 0.75,
+      width: horizontalElemWidth,
       height: Infinity,
       resizeHandles: ['e'],
+      onResizeStop: (_, data) => {
+        setHorizontalElemWidth(data.size.width)
+      }
     }
   }
 
