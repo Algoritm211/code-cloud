@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {bundler} from "../../codeBundler/bundler";
 import CodeEditor from "../CodeEditor/codeEditor";
 import Preview from "../Preview/Preview";
@@ -8,10 +8,16 @@ const CodeCell = () => {
   const [input, setInput] = useState('');
   const [bundledCode, setBundledCode] = useState('')
 
-  const onSubmitCode = async () => {
-    const bundledCode = await bundler(input);
-    setBundledCode(bundledCode);
-  }
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const bundledCodeForPreview = await bundler(input);
+      setBundledCode(bundledCodeForPreview)
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [input])
 
   const onInputChange = (value: string | undefined) => {
     if (value) {

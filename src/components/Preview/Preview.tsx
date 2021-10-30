@@ -35,11 +35,15 @@ const Preview: React.FC<IPreviewProps> = ({code}) => {
 
   useEffect(() => {
     iframeRef.current.srcdoc = iframeCodeRunnerTemplate
-
-    iframeRef
-      .current
-      .contentWindow
-      .postMessage(code, '*')
+    // Timeout for initializing srcdoc (previous line of code)
+    // srcDoc doesn't have enough time for initialize and user can't
+    // see visual side of code (srcDoc didn't have enough time to initialize html structure and set listeners)
+    setTimeout(() => {
+      iframeRef
+        .current
+        .contentWindow
+        .postMessage(code, '*')
+    }, 125)
   }, [code])
 
   return (
