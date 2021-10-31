@@ -13,16 +13,25 @@ const iframeCodeRunnerTemplate = `
       <div id='root'>
       </div>
       <script>
-        window.addEventListener('message', (event) => {
-          try {
-            eval(event.data);
-          } catch (error) {
-            const root = document.querySelector('#root');
+        const showError = (error) => {
+          const root = document.querySelector('#root');
             root.innerHTML = '<div style="color: red">' +
                               '<h3>Runtime error</h3>' + 
                                 error + 
                               '<div>'
-            console.error(error)       
+            console.error(error)  
+        }
+        
+        window.addEventListener('error', (event) => {
+          event.preventDefault();
+          showError(event.message) 
+        })
+        
+        window.addEventListener('message', (event) => {
+          try {
+            eval(event.data);
+          } catch (error) {
+            showError(error)
           }
         });
       </script>
