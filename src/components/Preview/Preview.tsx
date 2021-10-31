@@ -3,6 +3,7 @@ import './preview.css'
 
 interface IPreviewProps {
   code: string
+  bundleError: string
 }
 
 const iframeCodeRunnerTemplate = `
@@ -39,7 +40,7 @@ const iframeCodeRunnerTemplate = `
    </html>
   `
 
-const Preview: React.FC<IPreviewProps> = ({code}) => {
+const Preview: React.FC<IPreviewProps> = ({code, bundleError}) => {
   const iframeRef = useRef<any>();
 
   useEffect(() => {
@@ -64,6 +65,17 @@ const Preview: React.FC<IPreviewProps> = ({code}) => {
         // srcDoc={iframeCodeRunnerTemplate}
         sandbox='allow-scripts'
       />
+
+      {bundleError && (
+        <div className='bundle-error'>
+          <h1>
+            Build Error
+          </h1>
+          <div>
+            {bundleError}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
