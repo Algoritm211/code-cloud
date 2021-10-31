@@ -62,7 +62,7 @@ const Preview: React.FC<IPreviewProps> = ({code, bundleError}) => {
         ref={iframeRef}
         style={{backgroundColor: 'white'}}
         title='run_jsx'
-        // srcDoc={iframeCodeRunnerTemplate}
+        srcDoc={iframeCodeRunnerTemplate}
         sandbox='allow-scripts'
       />
 
