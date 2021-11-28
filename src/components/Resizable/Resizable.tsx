@@ -7,6 +7,12 @@ interface ResizableProps {
 
 }
 
+/**
+ * Component for resizing text editor
+ *
+ * @param direction
+ * @param children
+ */
 const Resizable: React.FC<ResizableProps> = ({direction, children}) => {
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
